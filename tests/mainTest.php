@@ -26,16 +26,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/default.xlsx'))->get_html();
 		// var_dump($src);
 
-		$html = str_get_html(
-			$src ,
-			true, // $lowercase
-			true, // $forceTagsClosed
-			DEFAULT_TARGET_CHARSET, // $target_charset
-			false, // $stripRN
-			DEFAULT_BR_TEXT, // $defaultBRText
-			DEFAULT_SPAN_TEXT // $defaultSpanText
-		);
-
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
 		$this->assertEquals( 1, count($html->find('table')) );
 		$this->assertEquals( 0, count($html->find('thead')) );
 		$this->assertEquals( 18, count($html->find('tr')) );
@@ -53,16 +44,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		));
 		// var_dump($src);
 
-		$html = str_get_html(
-			$src ,
-			true, // $lowercase
-			true, // $forceTagsClosed
-			DEFAULT_TARGET_CHARSET, // $target_charset
-			false, // $stripRN
-			DEFAULT_BR_TEXT, // $defaultBRText
-			DEFAULT_SPAN_TEXT // $defaultSpanText
-		);
-
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
 		$this->assertEquals( 0, count($html->find('table')) );
 		$this->assertEquals( 1, count($html->find('thead')) );
 		$this->assertEquals( 2, count($html->find('thead tr')) );
@@ -74,5 +56,38 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertNull( $html->find('tr',17)->childNodes(5) );
 
 	}//testXlsx2HtmlConvert()
+
+	/**
+	 * Cell Renderer
+	 */
+	public function testCellRenderer(){
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('cell_renderer'=>'text'));
+		// var_dump($src);
+
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+		$this->assertEquals( 'テキスト編集<br />改行コードを含む', $html->find('td',0)->innertext );
+		$this->assertEquals( 'テキスト編集<br />&lt;strong style=&quot;font-weight:bold;&quot;&gt;HTMLタグを含む&lt;/strong&gt;', $html->find('td',1)->innertext );
+		$this->assertEquals( 'テキスト編集<br /><br />- markdown を含む<br />- markdown の中に、&lt;code&gt;HTML code&lt;/code&gt; を含む。', $html->find('td',2)->innertext );
+
+
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('cell_renderer'=>'html'));
+		// var_dump($src);
+
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+		$this->assertEquals( 'テキスト編集'."\n".'改行コードを含む', $html->find('td',0)->innertext );
+		$this->assertEquals( 'テキスト編集'."\n".'<strong style="font-weight:bold;">HTMLタグを含む</strong>', $html->find('td',1)->innertext );
+		$this->assertEquals( 'テキスト編集'."\n"."\n".'- markdown を含む'."\n".'- markdown の中に、<code>HTML code</code> を含む。', $html->find('td',2)->innertext );
+
+
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('cell_renderer'=>'markdown'));
+		// var_dump($src);
+
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+		$this->assertEquals( '<p>テキスト編集'."\n".'改行コードを含む</p>'."\n", $html->find('td',0)->innertext );
+		$this->assertEquals( '<p>テキスト編集'."\n".'<strong style="font-weight:bold;">HTMLタグを含む</strong></p>'."\n", $html->find('td',1)->innertext );
+		$this->assertEquals( '<p>テキスト編集</p>'."\n"."\n".'<ul>'."\n".'<li>markdown を含む</li>'."\n".'<li>markdown の中に、<code>HTML code</code> を含む。</li>'."\n".'</ul>'."\n", $html->find('td',2)->innertext );
+
+
+	}//testCellRenderer()
 
 }

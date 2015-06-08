@@ -44,8 +44,15 @@ class main{
 	 * </dl>
 	 */
 	public function get_html($options=array()){
+		$options['renderer'] = @$options['renderer'].'';
+		$options['cell_renderer'] = @$options['cell_renderer'];
+		if(!strlen($options['cell_renderer'])){
+			$options['cell_renderer'] = 'text';
+		}
 		$options['header_row'] = @intval($options['header_row']);
 		$options['header_col'] = @intval($options['header_col']);
+
+		$skipCell = array();
 
 		$objWorksheet = $this->objPHPExcel->getActiveSheet();
 
@@ -73,7 +80,19 @@ class main{
 				if( $rowIdx <= $options['header_row'] || $colIdx <= $options['header_col'] ){
 					$cellTagName = 'th';
 				}
-				$tmpRow .= '<'.$cellTagName.'>'.$cell->getCalculatedValue().'</'.$cellTagName.'>'.PHP_EOL;
+				$cellValue = $cell->getCalculatedValue();
+				switch( $options['cell_renderer'] ){
+					case 'text':
+						$cellValue = htmlspecialchars($cellValue);
+						$cellValue = preg_replace('/\r\n|\r|\n/', '<br />', $cellValue);
+						break;
+					case 'html':
+						break;
+					case 'markdown':
+						$cellValue = \Michelf\MarkdownExtra::defaultTransform($cellValue);
+						break;
+				}
+				$tmpRow .= '<'.$cellTagName.'>'.$cellValue.'</'.$cellTagName.'>'.PHP_EOL;
 			}
 			$tmpRow .= '</tr>'.PHP_EOL;
 

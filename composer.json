@@ -1,7 +1,7 @@
 {
     "name": "tomk79/php-excel2html",
     "description": "Convert Excel(*.xlsx) to HTML table. with PHPExcel.",
-    "keywords": ["pickles"],
+    "keywords": [],
     "license": "MIT",
     "authors": [
         {

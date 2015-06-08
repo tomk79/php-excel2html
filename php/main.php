@@ -56,6 +56,9 @@ class main{
 
 		$objWorksheet = $this->objPHPExcel->getActiveSheet();
 
+		$mergedCells = $objWorksheet->getMergeCells();
+		// var_dump($mergedCells);
+
 		$rtn = '';
 		if( !@$options['strip_table_tag'] ){
 			$rtn .= '<table>'.PHP_EOL;
@@ -75,6 +78,31 @@ class main{
 				//    set will be iterated.
 			foreach ($cellIterator as $colIdxName=>$cell) {
 				$colIdx = \PHPExcel_Cell::columnIndexFromString( $colIdxName );
+				// var_dump($colIdx);
+				$rowspan = 1;
+				$colspan = 1;
+
+				if( @$skipCell[$colIdxName.$rowIdx] ){
+					continue;
+				}
+				foreach($mergedCells as $mergedCell){//連結セルの検索
+					if( preg_match('/^'.preg_quote($colIdxName.$rowIdx).'\\:([a-zA-Z]+)([0-9]+)$/', $mergedCell, $matched) ){
+						$maxIdxC = \PHPExcel_Cell::columnIndexFromString( $matched[1] );
+						// var_dump($colIdx);
+						// var_dump(\PHPExcel_Cell::stringFromColumnIndex($colIdx-1));
+						// var_dump($maxIdxC);
+						$maxIdxR = intval($matched[2]);
+						for( $idxC=$colIdx; $idxC<=$maxIdxC; $idxC++ ){
+							for( $idxR=$rowIdx; $idxR<=$maxIdxR; $idxR++ ){
+								$skipCell[\PHPExcel_Cell::stringFromColumnIndex($idxC-1).$idxR] = \PHPExcel_Cell::stringFromColumnIndex($idxC-1).$idxR;
+							}
+						}
+						$rowspan = $maxIdxC-$colIdx+1;
+						$colspan = $maxIdxR-$rowIdx+1;
+						break;
+					}
+				}
+
 				// var_dump($colIdx); //← $colIdx は1から始まります
 				$cellTagName = 'td';
 				if( $rowIdx <= $options['header_row'] || $colIdx <= $options['header_col'] ){
@@ -92,7 +120,7 @@ class main{
 						$cellValue = \Michelf\MarkdownExtra::defaultTransform($cellValue);
 						break;
 				}
-				$tmpRow .= '<'.$cellTagName.'>'.$cellValue.'</'.$cellTagName.'>'.PHP_EOL;
+				$tmpRow .= '<'.$cellTagName.($rowspan>1?' rowspan="'.$rowspan.'"':'').($colspan>1?' colspan="'.$colspan.'"':'').'>'.$cellValue.'</'.$cellTagName.'>'.PHP_EOL;
 			}
 			$tmpRow .= '</tr>'.PHP_EOL;
 
@@ -102,6 +130,7 @@ class main{
 				$tbody .= $tmpRow;
 			}
 		}
+		// var_dump($skipCell);
 
 		if( strlen($thead) ){
 			$rtn .= '<thead>'.PHP_EOL;

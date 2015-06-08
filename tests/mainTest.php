@@ -90,4 +90,26 @@ class mainTest extends PHPUnit_Framework_TestCase{
 
 	}//testCellRenderer()
 
+	/**
+	 * Merged Cells
+	 */
+	public function testMergedCells(){
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/merged_cells.xlsx'))->get_html();
+		// var_dump($src);
+
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+		$this->assertEquals( 'B4', $html->find('tr',3)->find('td',1)->innertext );
+		$this->assertEquals( '10', $html->find('tr',3)->find('td',1)->getAttribute('colspan') );
+		$this->assertEquals( '3', $html->find('tr',3)->find('td',1)->getAttribute('rowspan') );
+
+		$this->assertEquals( 'C16', $html->find('tr',15)->find('td',2)->innertext );
+		$this->assertEquals( '2', $html->find('tr',15)->find('td',2)->getAttribute('colspan') );
+		$this->assertEquals( '3', $html->find('tr',15)->find('td',2)->getAttribute('rowspan') );
+
+		$this->assertEquals( 'E5', $html->find('tr',4)->find('td',1)->innertext );
+
+		$this->assertEquals( 2, count($html->find('tr',16)->find('td')) );
+
+	}//testMergedCells()
+
 }

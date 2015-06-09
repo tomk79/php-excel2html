@@ -97,8 +97,8 @@ class main{
 								$skipCell[\PHPExcel_Cell::stringFromColumnIndex($idxC-1).$idxR] = \PHPExcel_Cell::stringFromColumnIndex($idxC-1).$idxR;
 							}
 						}
-						$rowspan = $maxIdxC-$colIdx+1;
-						$colspan = $maxIdxR-$rowIdx+1;
+						$colspan = $maxIdxC-$colIdx+1;
+						$rowspan = $maxIdxR-$rowIdx+1;
 						break;
 					}
 				}

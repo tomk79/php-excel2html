@@ -137,23 +137,25 @@ class main{
 					array_push( $styles, 'font-weight: '.($cellStyle->getFont()->getBold()?'bold':'normal').';' );
 					array_push( $styles, 'font-size: '.intval($cellStyle->getFont()->getsize()).'pt;' );
 					array_push( $styles, 'vertical-align: '.strtolower($cellStyle->getAlignment()->getVertical()).';' );
-					array_push( $styles, 'border-top: #'.strtolower($cellStyle->getBorders()->getTop()->getColor()->getRGB()).';' );
-					array_push( $styles, 'border-right: #'.strtolower($cellStyle->getBorders()->getRight()->getColor()->getRGB()).';' );
-					array_push( $styles, 'border-bottom: #'.strtolower($cellStyle->getBorders()->getBottom()->getColor()->getRGB()).';' );
-					array_push( $styles, 'border-left: #'.strtolower($cellStyle->getBorders()->getLeft()->getColor()->getRGB()).';' );
-					array_push( $styles, 'background-color: #'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).';' );
-					array_push( $styles, 'background-image: #'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).';' );
+					array_push( $styles, 'width: '.intval($objWorksheet->getColumnDimension($colIdxName)->getWidth()*8).'px;' );
+					array_push( $styles, 'height: '.intval($objWorksheet->getRowDimension($rowIdx)->getRowHeight()).'px;' );
+					array_push( $styles, 'border-top: 1px solid #'.strtolower($cellStyle->getBorders()->getTop()->getColor()->getRGB()).';' );
+					array_push( $styles, 'border-right: 1px solid #'.strtolower($cellStyle->getBorders()->getRight()->getColor()->getRGB()).';' );
+					array_push( $styles, 'border-bottom: 1px solid #'.strtolower($cellStyle->getBorders()->getBottom()->getColor()->getRGB()).';' );
+					array_push( $styles, 'border-left: 1px solid #'.strtolower($cellStyle->getBorders()->getLeft()->getColor()->getRGB()).';' );
+					array_push( $styles, 'background-color: #'.strtolower($cellStyle->getFill()->getEndColor()->getRGB()).';' );
 
-					array_push( $styles, 'background-image: -moz-linear-gradient('
-						.'  top'
-						.', #'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).' 0%'
-						.', #'.strtolower($cellStyle->getFill()->getEndColor()->getRGB()).');' );
-					array_push( $styles,  'background-image: -webkit-gradient('
-						.'  linear'
-						.', left top'
-						.', left bottom'
-						.', from(#'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).')'
-						.', to(#'.strtolower($cellStyle->getFill()->getEndColor()->getRGB()).'));' );
+					// array_push( $styles, 'background-image: -moz-linear-gradient('
+					// 	.'  top'
+					// 	.', #'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).' 0%'
+					// 	.', #'.strtolower($cellStyle->getFill()->getEndColor()->getRGB()).');' );
+					// array_push( $styles,  'background-image: -webkit-gradient('
+					// 	// .$cellStyle->getFill()->getFillType()
+					// 	.'  linear'
+					// 	.', left top'
+					// 	.', left bottom'
+					// 	.', from(#'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).')'
+					// 	.', to(#'.strtolower($cellStyle->getFill()->getEndColor()->getRGB()).'));' );
 
 				}
 

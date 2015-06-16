@@ -23,7 +23,9 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	 * *.xlsx to *.html
 	 */
 	public function testXlsx2HtmlConvert(){
-		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/default.xlsx'))->get_html();
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/default.xlsx'))->get_html(array(
+			'renderer'=>'simplify'
+		));
 		// var_dump($src);
 
 		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
@@ -38,6 +40,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 
 
 		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/default.xlsx'))->get_html(array(
+			'renderer'=>'simplify',
 			'header_row'=>2,
 			'header_col'=>1,
 			'strip_table_tag'=>true
@@ -61,7 +64,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	 * Cell Renderer
 	 */
 	public function testCellRenderer(){
-		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('cell_renderer'=>'text'));
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('renderer'=>'simplify','cell_renderer'=>'text'));
 		// var_dump($src);
 
 		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
@@ -70,7 +73,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( 'テキスト編集<br /><br />- markdown を含む<br />- markdown の中に、&lt;code&gt;HTML code&lt;/code&gt; を含む。', $html->find('td',2)->innertext );
 
 
-		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('cell_renderer'=>'html'));
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('renderer'=>'simplify','cell_renderer'=>'html'));
 		// var_dump($src);
 
 		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
@@ -79,7 +82,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( 'テキスト編集'."\n"."\n".'- markdown を含む'."\n".'- markdown の中に、<code>HTML code</code> を含む。', $html->find('td',2)->innertext );
 
 
-		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('cell_renderer'=>'markdown'));
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('renderer'=>'simplify','cell_renderer'=>'markdown'));
 		// var_dump($src);
 
 		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
@@ -94,7 +97,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	 * Merged Cells
 	 */
 	public function testMergedCells(){
-		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/merged_cells.xlsx'))->get_html();
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/merged_cells.xlsx'))->get_html(array('renderer'=>'simplify'));
 		// var_dump($src);
 
 		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
@@ -111,5 +114,18 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( 2, count($html->find('tr',16)->find('td')) );
 
 	}//testMergedCells()
+
+
+	/**
+	 * cell styles
+	 */
+	public function testCellStyles(){
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_styled.xlsx'))->get_html(array());
+		// var_dump($src);
+
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+		$this->assertEquals( 'B4', $html->find('tr',3)->find('td',1)->innertext );
+
+	}//testCellStyles()
 
 }

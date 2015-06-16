@@ -45,6 +45,9 @@ class main{
 	 */
 	public function get_html($options=array()){
 		$options['renderer'] = @$options['renderer'].'';
+		if(!strlen($options['renderer'])){
+			$options['renderer'] = 'strict';
+		}
 		$options['cell_renderer'] = @$options['cell_renderer'];
 		if(!strlen($options['cell_renderer'])){
 			$options['cell_renderer'] = 'text';
@@ -59,10 +62,7 @@ class main{
 		$mergedCells = $objWorksheet->getMergeCells();
 		// var_dump($mergedCells);
 
-		$rtn = '';
-		if( !@$options['strip_table_tag'] ){
-			$rtn .= '<table>'.PHP_EOL;
-		}
+		ob_start();
 		$thead = '';
 		$tbody = '';
 		foreach ($objWorksheet->getRowIterator() as $rowIdx=>$row) {
@@ -120,7 +120,44 @@ class main{
 						$cellValue = \Michelf\MarkdownExtra::defaultTransform($cellValue);
 						break;
 				}
-				$tmpRow .= '<'.$cellTagName.($rowspan>1?' rowspan="'.$rowspan.'"':'').($colspan>1?' colspan="'.$colspan.'"':'').'>'.$cellValue.'</'.$cellTagName.'>'.PHP_EOL;
+
+				// セルのスタイルを調べて、CSSを生成
+				$styles = array();
+				$cellStyle = $cell->getStyle();
+				// print('<pre>');
+				// // $cellStyle->getBorders()->getOutline();
+				// var_dump($cellStyle->getBorders()->getLeft()->getColor()->getRGB());
+				// print('</pre>');
+				if( $cellStyle->getAlignment()->getHorizontal() != 'general' ){
+					// text-align は、単純化設定でも出力する
+					array_push( $styles, 'text-align: '.strtolower($cellStyle->getAlignment()->getHorizontal()).';' );
+				}
+				if( $options['renderer'] == 'strict' ){
+					array_push( $styles, 'color: #'.strtolower($cellStyle->getFont()->getColor()->getRGB()).';' );
+					array_push( $styles, 'font-weight: '.($cellStyle->getFont()->getBold()?'bold':'normal').';' );
+					array_push( $styles, 'font-size: '.intval($cellStyle->getFont()->getsize()).'pt;' );
+					array_push( $styles, 'vertical-align: '.strtolower($cellStyle->getAlignment()->getVertical()).';' );
+					array_push( $styles, 'border-top: #'.strtolower($cellStyle->getBorders()->getTop()->getColor()->getRGB()).';' );
+					array_push( $styles, 'border-right: #'.strtolower($cellStyle->getBorders()->getRight()->getColor()->getRGB()).';' );
+					array_push( $styles, 'border-bottom: #'.strtolower($cellStyle->getBorders()->getBottom()->getColor()->getRGB()).';' );
+					array_push( $styles, 'border-left: #'.strtolower($cellStyle->getBorders()->getLeft()->getColor()->getRGB()).';' );
+					array_push( $styles, 'background-color: #'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).';' );
+					array_push( $styles, 'background-image: #'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).';' );
+
+					array_push( $styles, 'background-image: -moz-linear-gradient('
+						.'  top'
+						.', #'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).' 0%'
+						.', #'.strtolower($cellStyle->getFill()->getEndColor()->getRGB()).');' );
+					array_push( $styles,  'background-image: -webkit-gradient('
+						.'  linear'
+						.', left top'
+						.', left bottom'
+						.', from(#'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).')'
+						.', to(#'.strtolower($cellStyle->getFill()->getEndColor()->getRGB()).'));' );
+
+				}
+
+				$tmpRow .= '<'.$cellTagName.($rowspan>1?' rowspan="'.$rowspan.'"':'').($colspan>1?' colspan="'.$colspan.'"':'').''.(count($styles)?' style="'.htmlspecialchars(implode(' ',$styles)).'"':'').'>'.$cellValue.'</'.$cellTagName.'>'.PHP_EOL;
 			}
 			$tmpRow .= '</tr>'.PHP_EOL;
 
@@ -132,19 +169,22 @@ class main{
 		}
 		// var_dump($skipCell);
 
-		if( strlen($thead) ){
-			$rtn .= '<thead>'.PHP_EOL;
-			$rtn .= $thead;
-			$rtn .= '</thead>'.PHP_EOL;
+		if( !@$options['strip_table_tag'] ){
+			print '<table>'.PHP_EOL;
 		}
-		$rtn .= '<tbody>'.PHP_EOL;
-		$rtn .= $tbody;
-		$rtn .= '</tbody>'.PHP_EOL;
+		if( strlen($thead) ){
+			print '<thead>'.PHP_EOL;
+			print $thead;
+			print '</thead>'.PHP_EOL;
+		}
+		print '<tbody>'.PHP_EOL;
+		print $tbody;
+		print '</tbody>'.PHP_EOL;
 
 		if( !@$options['strip_table_tag'] ){
-			$rtn .= '</table>'.PHP_EOL;
+			print '</table>'.PHP_EOL;
 		}
-
+		$rtn = ob_get_clean();
 		return $rtn;
 	}
 

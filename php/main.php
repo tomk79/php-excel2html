@@ -62,6 +62,19 @@ class main{
 		$mergedCells = $objWorksheet->getMergeCells();
 		// var_dump($mergedCells);
 
+		// セル幅を記憶
+		$col_widths = array();
+		foreach ($objWorksheet->getRowIterator() as $rowIdx=>$row) {
+			$cellIterator = $row->getCellIterator();
+			$cellIterator->setIterateOnlyExistingCells(true);
+			foreach ($cellIterator as $colIdxName=>$cell) {
+				$colIdx = \PHPExcel_Cell::columnIndexFromString( $colIdxName );
+				$col_widths[$colIdx] = intval( $objWorksheet->getColumnDimension($colIdxName)->getWidth() );
+			}
+			break;
+		}
+		$col_width_sum = array_sum($col_widths);
+
 		ob_start();
 		$thead = '';
 		$tbody = '';
@@ -135,15 +148,16 @@ class main{
 				if( $options['renderer'] == 'strict' ){
 					array_push( $styles, 'color: #'.strtolower($cellStyle->getFont()->getColor()->getRGB()).';' );
 					array_push( $styles, 'font-weight: '.($cellStyle->getFont()->getBold()?'bold':'normal').';' );
-					array_push( $styles, 'font-size: '.intval($cellStyle->getFont()->getsize()).'pt;' );
-					array_push( $styles, 'vertical-align: '.strtolower($cellStyle->getAlignment()->getVertical()).';' );
-					array_push( $styles, 'width: '.intval($objWorksheet->getColumnDimension($colIdxName)->getWidth()*8).'px;' );
+					array_push( $styles, 'font-size: '.intval($cellStyle->getFont()->getsize()/12*100).'%;' );
+					$verticalAlign = strtolower($cellStyle->getAlignment()->getVertical());
+					array_push( $styles, 'vertical-align: '.($verticalAlign=='center'?'middle':$verticalAlign).';' );
+					array_push( $styles, 'width: '.floatval($col_widths[$colIdx]/$col_width_sum*100).'%;' );
 					array_push( $styles, 'height: '.intval($objWorksheet->getRowDimension($rowIdx)->getRowHeight()).'px;' );
-					array_push( $styles, 'border-top: 1px solid #'.strtolower($cellStyle->getBorders()->getTop()->getColor()->getRGB()).';' );
-					array_push( $styles, 'border-right: 1px solid #'.strtolower($cellStyle->getBorders()->getRight()->getColor()->getRGB()).';' );
-					array_push( $styles, 'border-bottom: 1px solid #'.strtolower($cellStyle->getBorders()->getBottom()->getColor()->getRGB()).';' );
-					array_push( $styles, 'border-left: 1px solid #'.strtolower($cellStyle->getBorders()->getLeft()->getColor()->getRGB()).';' );
-					array_push( $styles, 'background-color: #'.strtolower($cellStyle->getFill()->getEndColor()->getRGB()).';' );
+					array_push( $styles, 'border-top: '.$this->get_borderstyle_by_border($cellStyle->getBorders()->getTop()).';' );
+					array_push( $styles, 'border-right: '.$this->get_borderstyle_by_border($cellStyle->getBorders()->getRight()).';' );
+					array_push( $styles, 'border-bottom: '.$this->get_borderstyle_by_border($cellStyle->getBorders()->getBottom()).';' );
+					array_push( $styles, 'border-left: '.$this->get_borderstyle_by_border($cellStyle->getBorders()->getLeft()).';' );
+					array_push( $styles, 'background-color: #'.strtolower($cellStyle->getFill()->getStartColor()->getRGB()).';' );
 
 					// array_push( $styles, 'background-image: -moz-linear-gradient('
 					// 	.'  top'
@@ -159,7 +173,10 @@ class main{
 
 				}
 
-				$tmpRow .= '<'.$cellTagName.($rowspan>1?' rowspan="'.$rowspan.'"':'').($colspan>1?' colspan="'.$colspan.'"':'').''.(count($styles)?' style="'.htmlspecialchars(implode(' ',$styles)).'"':'').'>'.$cellValue.'</'.$cellTagName.'>'.PHP_EOL;
+				$tmpRow .= '<'.$cellTagName.($rowspan>1?' rowspan="'.$rowspan.'"':'').($colspan>1?' colspan="'.$colspan.'"':'').''.(count($styles)?' style="'.htmlspecialchars(implode(' ',$styles)).'"':'').'>';
+				$tmpRow .= $cellValue;
+				// $tmpRow .= $cellStyle->getFill()->getFillType();
+				$tmpRow .= '</'.$cellTagName.'>'.PHP_EOL;
 			}
 			$tmpRow .= '</tr>'.PHP_EOL;
 
@@ -187,6 +204,68 @@ class main{
 			print '</table>'.PHP_EOL;
 		}
 		$rtn = ob_get_clean();
+		return $rtn;
+	}// get_html()
+
+	/**
+	 * ボーダーオブジェクトからHTMLのborder-style名を得る
+	 */
+	private function get_borderstyle_by_border( $border ){
+		$style = $border->getBorderStyle();
+		$border_width = '1px';
+		$border_style = 'solid';
+		switch( $style ){
+			case 'none':
+				$border_width = '0';
+				$border_style = 'none';
+				break;
+			case 'dashDot':
+				$border_style = 'dashed';
+				break;
+			case 'dashDotDot':
+				$border_style = 'dashed';
+				break;
+			case 'dashed':
+				$border_style = 'dashed';
+				break;
+			case 'dotted':
+				$border_style = 'dotted';
+				break;
+			case 'double':
+				$border_width = '3px';
+				$border_style = 'double';
+				break;
+			case 'hair':
+				break;
+			case 'medium':
+				$border_width = '3px';
+				break;
+			case 'mediumDashDot':
+				$border_width = '3px';
+				$border_style = 'dashed';
+				break;
+			case 'mediumDashDotDot':
+				$border_width = '3px';
+				$border_style = 'dashed';
+				break;
+			case 'mediumDashed':
+				$border_width = '3px';
+				$border_style = 'dashed';
+				break;
+			case 'slantDashDot':
+				$border_width = '3px';
+				$border_style = 'solid';
+				break;
+			case 'thick':
+				$border_width = '5px';
+				$border_style = 'solid';
+				break;
+			case 'thin':
+				$border_width = '1px';
+				$border_style = 'solid';
+				break;
+		}
+		$rtn = $border_width.' '.$border_style.' #'.strtolower($border->getColor()->getRGB()).'';
 		return $rtn;
 	}
 

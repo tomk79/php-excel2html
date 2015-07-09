@@ -47,19 +47,19 @@ class main{
 	 *   <dt>string cell_renderer</dt>
 	 *     <dd>セルのレンダリングモード。<code>html</code>(HTMLコードとして処理)、<code>text</code>(プレーンテキストとして処理)、または<code>markdown</code>(Markdownとして処理) のいずれかを指定します。デフォルトは <code>text</code> です。</dd>
 	 * 
-	 *   <dt>string render_cell_width</dt>
+	 *   <dt>bool render_cell_width</dt>
 	 *     <dd>セル幅を再現する。</dd>
-	 *   <dt>string render_cell_height</dt>
+	 *   <dt>bool render_cell_height</dt>
 	 *     <dd>セル高を再現する。</dd>
-	 *   <dt>string render_cell_background</dt>
+	 *   <dt>bool render_cell_background</dt>
 	 *     <dd>セルの背景設定を再現する。</dd>
-	 *   <dt>string render_cell_font</dt>
+	 *   <dt>bool render_cell_font</dt>
 	 *     <dd>セルの文字設定を再現する。</dd>
-	 *   <dt>string render_cell_borders</dt>
+	 *   <dt>bool render_cell_borders</dt>
 	 *     <dd>セルのボーダーを再現する。</dd>
-	 *   <dt>string render_cell_align</dt>
+	 *   <dt>bool render_cell_align</dt>
 	 *     <dd>セルの左右位置揃えを再現する。</dd>
-	 *   <dt>string render_cell_vertical_align</dt>
+	 *   <dt>bool render_cell_vertical_align</dt>
 	 *     <dd>セルの上下位置揃えを再現する。</dd>
 	 * 
 	 *   <dt>int header_row</dt>
@@ -108,7 +108,7 @@ class main{
 		}
 		$rtn['header_row'] = @intval($options['header_row']);
 		$rtn['header_col'] = @intval($options['header_col']);
-		$rtn['strip_table_tag'] = @intval($options['strip_table_tag']);
+		$rtn['strip_table_tag'] = @(bool) $options['strip_table_tag'];
 
 		// レンダーオプションの初期値を設定
 		$rtn['render_cell_width']          = true;
@@ -130,25 +130,25 @@ class main{
 		}
 
 		if( !is_null( @$options['render_cell_width'] ) ){
-			$rtn['render_cell_width'] = @boolval($options['render_cell_width']);
+			$rtn['render_cell_width'] = @(bool) $options['render_cell_width'];
 		}
 		if( !is_null( @$options['render_cell_height'] ) ){
-			$rtn['render_cell_height'] = @boolval($options['render_cell_height']);
+			$rtn['render_cell_height'] = @(bool) $options['render_cell_height'];
 		}
 		if( !is_null( @$options['render_cell_background'] ) ){
-			$rtn['render_cell_background'] = @boolval($options['render_cell_background']);
+			$rtn['render_cell_background'] = @(bool) $options['render_cell_background'];
 		}
 		if( !is_null( @$options['render_cell_font'] ) ){
-			$rtn['render_cell_font'] = @boolval($options['render_cell_font']);
+			$rtn['render_cell_font'] = @(bool) $options['render_cell_font'];
 		}
 		if( !is_null( @$options['render_cell_borders'] ) ){
-			$rtn['render_cell_borders'] = @boolval($options['render_cell_borders']);
+			$rtn['render_cell_borders'] = @(bool) $options['render_cell_borders'];
 		}
 		if( !is_null( @$options['render_cell_align'] ) ){
-			$rtn['render_cell_align'] = @boolval($options['render_cell_align']);
+			$rtn['render_cell_align'] = @(bool) $options['render_cell_align'];
 		}
 		if( !is_null( @$options['render_cell_vertical_align'] ) ){
-			$rtn['render_cell_vertical_align'] = @boolval($options['render_cell_vertical_align']);
+			$rtn['render_cell_vertical_align'] = @(bool) $options['render_cell_vertical_align'];
 		}
 
 		return $rtn;

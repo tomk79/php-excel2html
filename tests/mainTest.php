@@ -70,6 +70,10 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( 'テキスト編集<br />改行コードを含む', $html->find('td',0)->innertext );
 		$this->assertEquals( 'テキスト編集<br />&lt;strong style=&quot;font-weight:bold;&quot;&gt;HTMLタグを含む&lt;/strong&gt;', $html->find('td',1)->innertext );
 		$this->assertEquals( 'テキスト編集<br /><br />- markdown を含む<br />- markdown の中に、&lt;code&gt;HTML code&lt;/code&gt; を含む。', $html->find('td',2)->innertext );
+		$this->assertEquals( '1,234,567,890', $html->find('td',3)->innertext );
+		$this->assertEquals( '▲ 1,234,567,890', $html->find('td',4)->innertext );
+		$this->assertEquals( '200', $html->find('td',5)->innertext );
+		$this->assertEquals( '150', $html->find('td',6)->innertext );
 
 
 		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('renderer'=>'simplify','cell_renderer'=>'html'));

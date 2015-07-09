@@ -104,7 +104,7 @@ class render_html_by_excel{
 				if( $rowIdx <= $options['header_row'] || $colIdx <= $options['header_col'] ){
 					$cellTagName = 'th';
 				}
-				$cellValue = $cell->getCalculatedValue();
+				$cellValue = $cell->getFormattedValue();
 				switch( $options['cell_renderer'] ){
 					case 'text':
 						$cellValue = htmlspecialchars($cellValue);
@@ -116,6 +116,7 @@ class render_html_by_excel{
 						$cellValue = \Michelf\MarkdownExtra::defaultTransform($cellValue);
 						break;
 				}
+				// var_dump( $cell->getNumberFormat() );
 
 				// セルのスタイルを調べて、CSSを生成
 				$styles = array();

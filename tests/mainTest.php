@@ -66,7 +66,6 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	public function testCellRenderer(){
 		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('renderer'=>'simplify','cell_renderer'=>'text'));
 		// var_dump($src);
-
 		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
 		$this->assertEquals( 'テキスト編集<br />改行コードを含む', $html->find('td',0)->innertext );
 		$this->assertEquals( 'テキスト編集<br />&lt;strong style=&quot;font-weight:bold;&quot;&gt;HTMLタグを含む&lt;/strong&gt;', $html->find('td',1)->innertext );
@@ -75,7 +74,6 @@ class mainTest extends PHPUnit_Framework_TestCase{
 
 		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('renderer'=>'simplify','cell_renderer'=>'html'));
 		// var_dump($src);
-
 		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
 		$this->assertEquals( 'テキスト編集'."\n".'改行コードを含む', $html->find('td',0)->innertext );
 		$this->assertEquals( 'テキスト編集'."\n".'<strong style="font-weight:bold;">HTMLタグを含む</strong>', $html->find('td',1)->innertext );
@@ -84,11 +82,31 @@ class mainTest extends PHPUnit_Framework_TestCase{
 
 		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/cell_renderer.xlsx'))->get_html(array('renderer'=>'simplify','cell_renderer'=>'markdown'));
 		// var_dump($src);
-
 		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
 		$this->assertEquals( '<p>テキスト編集'."\n".'改行コードを含む</p>'."\n", $html->find('td',0)->innertext );
 		$this->assertEquals( '<p>テキスト編集'."\n".'<strong style="font-weight:bold;">HTMLタグを含む</strong></p>'."\n", $html->find('td',1)->innertext );
 		$this->assertEquals( '<p>テキスト編集</p>'."\n"."\n".'<ul>'."\n".'<li>markdown を含む</li>'."\n".'<li>markdown の中に、<code>HTML code</code> を含む。</li>'."\n".'</ul>'."\n", $html->find('td',2)->innertext );
+
+
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/utf-8.csv'))->get_html(array('cell_renderer'=>'markdown'));
+		// var_dump($src);
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+		$this->assertEquals( '<h2>markdown h2</h2>'."\n", $html->find('tr',6)->find('td',0)->innertext );
+		$this->assertEquals( '<h2>html h2</h2>'."\n", $html->find('tr',7)->find('td',0)->innertext );
+
+
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/shift_jis.csv'))->get_html(array('cell_renderer'=>'text'));
+		// var_dump($src);
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+		$this->assertEquals( '## markdown h2', $html->find('tr',6)->find('td',0)->innertext );
+		$this->assertEquals( '&lt;h2&gt;html h2&lt;/h2&gt;', $html->find('tr',7)->find('td',0)->innertext );
+
+
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/utf-8.csv'))->get_html(array('cell_renderer'=>'html'));
+		// var_dump($src);
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+		$this->assertEquals( '## markdown h2', $html->find('tr',6)->find('td',0)->innertext );
+		$this->assertEquals( '<h2>html h2</h2>', $html->find('tr',7)->find('td',0)->innertext );
 
 
 	}//testCellRenderer()
@@ -117,6 +135,36 @@ class mainTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * Render by CSV in UTF-8
+	 */
+	public function testRenderByCSVinUtf8(){
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/utf-8.csv'))->get_html(array('renderer'=>'simplify'));
+		// var_dump($src);
+
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+		$this->assertEquals( '', $html->find('tr',0)->find('td',0)->innertext );
+		$this->assertEquals( 'タイトル行1', $html->find('tr',0)->find('td',1)->innertext );
+		$this->assertEquals( 'マルチバイト文字', $html->find('tr',1)->find('td',0)->innertext );
+		$this->assertEquals( 'E9', $html->find('tr',8)->find('td',4)->innertext );
+	}//testRenderByCSVinUtf8()
+
+
+	/**
+	 * Render by CSV in Shift_JIS
+	 */
+	public function testRenderByCSVinShift_JIS(){
+		$src = (new \tomk79\excel2html\main(__DIR__.'/sample/shift_jis.csv'))->get_html(array('renderer'=>'simplify'));
+		// var_dump($src);
+
+		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+		$this->assertEquals( '', $html->find('tr',0)->find('td',0)->innertext );
+		$this->assertEquals( 'タイトル行1', $html->find('tr',0)->find('td',1)->innertext );
+		$this->assertEquals( 'マルチバイト文字', $html->find('tr',1)->find('td',0)->innertext );
+		$this->assertEquals( 'E9', $html->find('tr',8)->find('td',4)->innertext );
+	}//testRenderByCSVinShift_JIS()
+
+
+	/**
 	 * cell styles
 	 */
 	public function testCellStyles(){
@@ -125,6 +173,34 @@ class mainTest extends PHPUnit_Framework_TestCase{
 
 		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
 		$this->assertEquals( 'B4', $html->find('tr',3)->find('td',1)->innertext );
+
+	}//testCellStyles()
+
+
+	/**
+	 * options
+	 */
+	public function testOptionss(){
+		$e2h = new \tomk79\excel2html\main(__DIR__.'/sample/cell_styled.xlsx');
+		$src = $e2h->get_html(array());
+		$options = $e2h->get_options();
+		// var_dump($src);
+		$this->assertEquals( 'strict', $options['renderer'] );
+
+
+		$e2h = new \tomk79\excel2html\main(__DIR__.'/sample/cell_styled.xlsx');
+		$src = $e2h->get_html(array('renderer'=>'simplify'));
+		$options = $e2h->get_options();
+		// var_dump($src);
+		$this->assertEquals( 'simplify', $options['renderer'] );
+
+
+
+		$e2h = new \tomk79\excel2html\main(__DIR__.'/sample/utf-8.csv');
+		$src = $e2h->get_html(array('renderer'=>'strict'));
+		$options = $e2h->get_options();
+		// var_dump($src);
+		$this->assertEquals( 'simplify', $options['renderer'] );
 
 	}//testCellStyles()
 

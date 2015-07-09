@@ -29,5 +29,21 @@ print($src);
 
 ?>
 
+<h2>shift_jis.csv</h2>
+<?php
+
+$src = (new \tomk79\excel2html\main(__DIR__.'/tests/sample/shift_jis.csv'))->get_html(array('renderer'=>'simplify'));
+print($src);
+
+?>
+
+<h2>utf-8.csv</h2>
+<?php
+
+$src = (new \tomk79\excel2html\main(__DIR__.'/tests/sample/utf-8.csv'))->get_html(array('renderer'=>'simplify'));
+print($src);
+
+?>
+
 </body>
 </html>

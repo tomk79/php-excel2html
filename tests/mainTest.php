@@ -17,6 +17,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		require_once(__DIR__.'/libs/simple_html_dom.php');
 		$this->fs = new \tomk79\filesystem();
 		mb_internal_encoding('utf-8');
+		@date_default_timezone_set('Asia/Tokyo');
 	}
 
 	/**
@@ -184,7 +185,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	/**
 	 * options
 	 */
-	public function testOptionss(){
+	public function testOptions(){
 		$e2h = new \tomk79\excel2html\main(__DIR__.'/sample/cell_styled.xlsx');
 		$src = $e2h->get_html(array());
 		$options = $e2h->get_options();
@@ -199,13 +200,30 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( 'simplify', $options['renderer'] );
 
 
-
 		$e2h = new \tomk79\excel2html\main(__DIR__.'/sample/utf-8.csv');
 		$src = $e2h->get_html(array('renderer'=>'strict'));
 		$options = $e2h->get_options();
 		// var_dump($src);
 		$this->assertEquals( 'simplify', $options['renderer'] );
+		$this->assertTrue( $options['render_cell_width'] );
+		$this->assertFalse( $options['render_cell_borders'] );
 
-	}//testCellStyles()
+
+		$e2h = new \tomk79\excel2html\main(__DIR__.'/sample/default.xlsx');
+		$src = $e2h->get_html(array(
+			'header_row' => 1 ,
+			'header_col' => 1 ,
+			'renderer' => 'simplify' ,
+			'cell_renderer' => 'html' ,
+			'render_cell_width' => true ,
+			'strip_table_tag' => true
+		));
+		$options = $e2h->get_options();
+		// var_dump($src);
+		$this->assertEquals( 'simplify', $options['renderer'] );
+		$this->assertTrue( $options['render_cell_width'] );
+		$this->assertFalse( $options['render_cell_borders'] );
+
+	}//testOptions()
 
 }

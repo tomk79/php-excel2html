@@ -1,7 +1,7 @@
-# php-excel2html
+# tomk79/php-excel2html
 
 
-Convert Excel(*.xlsx) to HTML Table. (with PHPExcel).
+Convert Excel(*.xlsx) to HTML Table. (with [PHPExcel](https://github.com/PHPOffice/PHPExcel)).
 
 Excel 形式のファイルを、HTMLの tableタグに変換します。
 ([PHPExcel](https://github.com/PHPOffice/PHPExcel) を利用しています)
@@ -38,6 +38,13 @@ Excel 形式のファイルを、HTMLの tableタグに変換します。
 
 
 ## Basic Usage - 使い方
+
+`composer` コマンドを使用してプロジェクトに _tomk79/php-excel2html_ をインストールします。(`composer`について詳しくは[composerのドキュメント](https://getcomposer.org/doc/)をご覧ください)
+```bash
+$ composer require tomk79/php-excel2html
+```
+
+次のコードは実装例です。
 
 ```php
 <?php
@@ -92,8 +99,3 @@ MIT License
 - (C)Tomoya Koyanagi <tomk79@gmail.com>
 - website: <http://www.pxt.jp/>
 - Twitter: @tomk79 <http://twitter.com/tomk79/>
-
-
-
-
-

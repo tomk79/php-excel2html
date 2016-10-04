@@ -19,7 +19,7 @@
     "require": {
         "php": ">=5.3.0",
         "tomk79/filesystem": "1.*",
-        "michelf/php-markdown": "1.4.*",
+        "michelf/php-markdown": "1.6.*",
         "phpoffice/phpexcel": "1.8.*"
     },
     "require-dev": {

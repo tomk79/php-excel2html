@@ -69,9 +69,8 @@ class render_html_by_excel{
 			$cellIterator->setIterateOnlyExistingCells(true);
 				// This loops through all cells,
 				//    even if a cell value is not set.
-				// By default, only cells that have a value 
+				// By default, only cells that have a value
 				//    set will be iterated.
-			$html_colgroup = '';
 			foreach ($cellIterator as $colIdxName=>$cell) {
 				$colIdx = \PHPExcel_Cell::columnIndexFromString( $colIdxName );
 				// var_dump($colIdx);
@@ -132,9 +131,6 @@ class render_html_by_excel{
 						array_push( $styles, 'text-align: '.strtolower($cellStyle->getAlignment()->getHorizontal()).';' );
 					}
 				}
-				if( $options['render_cell_width'] ){
-					$html_colgroup .= '<col style="width:'.floatval($col_widths[$colIdx]/$col_width_sum*100).'%;" />'.PHP_EOL;
-				}
 				if( $options['render_cell_height'] ){
 					array_push( $styles, 'height: '.intval($objWorksheet->getRowDimension($rowIdx)->getRowHeight()).'px;' );
 				}
@@ -176,9 +172,11 @@ class render_html_by_excel{
 		if( !@$options['strip_table_tag'] ){
 			print '<table>'.PHP_EOL;
 		}
-		if( strlen($html_colgroup) ){
+		if( $options['render_cell_width'] ){
 			print '<colgroup>'.PHP_EOL;
-			print $html_colgroup;
+			foreach( $col_widths as $colIdx=>$colRow ){
+				print '<col style="width:'.floatval($colRow/$col_width_sum*100).'%;" />'.PHP_EOL;
+			}
 			print '</colgroup>'.PHP_EOL;
 		}
 		if( strlen($thead) ){

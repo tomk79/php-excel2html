@@ -48,7 +48,14 @@ class render_html_by_excel{
 		$col_widths = array();
 		foreach ($objWorksheet->getRowIterator() as $rowIdx=>$row) {
 			$cellIterator = $row->getCellIterator();
-			$cellIterator->setIterateOnlyExistingCells(true);
+			try {
+				$cellIterator->setIterateOnlyExistingCells(true);
+					// This loops through all cells,
+					//    even if a cell value is not set.
+					// By default, only cells that have a value
+					//    set will be iterated.
+			} catch (\PHPExcel_Exception $e) {
+			}
 			foreach ($cellIterator as $colIdxName=>$cell) {
 				$colIdx = \PHPExcel_Cell::columnIndexFromString( $colIdxName );
 				$col_widths[$colIdx] = intval( $objWorksheet->getColumnDimension($colIdxName)->getWidth() );
@@ -66,11 +73,14 @@ class render_html_by_excel{
 			$tmpRow = '';
 			$tmpRow .= '<tr>'.PHP_EOL;
 			$cellIterator = $row->getCellIterator();
-			$cellIterator->setIterateOnlyExistingCells(true);
-				// This loops through all cells,
-				//    even if a cell value is not set.
-				// By default, only cells that have a value
-				//    set will be iterated.
+			try {
+				$cellIterator->setIterateOnlyExistingCells(true);
+					// This loops through all cells,
+					//    even if a cell value is not set.
+					// By default, only cells that have a value
+					//    set will be iterated.
+			} catch (\PHPExcel_Exception $e) {
+			}
 			foreach ($cellIterator as $colIdxName=>$cell) {
 				$colIdx = \PHPExcel_Cell::columnIndexFromString( $colIdxName );
 				// var_dump($colIdx);

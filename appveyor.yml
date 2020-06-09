@@ -31,9 +31,10 @@ init:
 # Install scripts
 install:
   ## Set PHP.
-  - cinst php
-  - SET PATH=C:\tools\php\;%PATH%
-  - cd C:\tools\php
+  - ps: Set-Service wuauserv -StartupType Manual
+  - cinst php --version 7.1.3 -y
+  - SET PATH=C:\tools\php71\;%PATH%
+  - cd C:\tools\php71
   - copy php.ini-production php.ini
   - echo date.timezone="Asia/Tokyo" >> php.ini
   - echo extension_dir=ext >> php.ini
@@ -44,6 +45,7 @@ install:
   - echo extension=php_curl.dll >> php.ini
   - echo extension=php_xsl.dll >> php.ini
   - echo extension=php_intl.dll >> php.ini
+  - echo extension=php_pdo_sqlite.dll >> php.ini
   - echo output_buffering = Off >> php.ini
   - echo default_charset = UTF-8 >> php.ini
   - echo mbstring.language = Japanese >> php.ini

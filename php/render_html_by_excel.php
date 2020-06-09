@@ -30,7 +30,7 @@ class render_html_by_excel{
 	public function __construct( $fs, $filename ){
 		$this->fs = $fs;
 		$this->filename = $filename;
-		$this->objPHPExcel = \PHPExcel_IOFactory::load( $this->filename );
+		@$this->objPHPExcel = \PHPExcel_IOFactory::load( $this->filename );
 	}
 
 	/**

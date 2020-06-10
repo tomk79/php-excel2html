@@ -90,6 +90,40 @@ print $src;
 </dl>
 
 
+## 更新履歴 - Change log
+
+### tomk79/php-excel2html v0.0.7 (2016年10月18日)
+
+- PHPExcelの特定の処理で異常終了する場合がある問題を修正。
+
+### tomk79/php-excel2html v0.0.6 (2016年10月17日)
+
+- 最後の行が結合されている場合に、列幅指定が欠落する不具合を修正。
+
+### tomk79/php-excel2html v0.0.5 (2016年10月4日)
+
+- michelf/php-markdown を更新
+
+### tomk79/php-excel2html v0.0.4 (2015年7月28日)
+
+- PHP5.4系で起きていた不具合を修正。
+
+### tomk79/php-excel2html v0.0.3 (2015年7月9日)
+
+- CSVを入力した場合の処理を分離・調整、詳細なレンダリングオプションを追加。
+- セルの値を、書式設定に従って表示するようになった。
+
+
+### tomk79/php-excel2html v0.0.2 (2015年6月18日)
+
+- セルの幅を `%` で計算するように修正。
+- その他不具合の修正。
+
+### tomk79/php-excel2html v0.0.1 (2015年6月9日)
+
+- Initial Release.
+
+
 ## ライセンス - License
 
 MIT License
@@ -98,5 +132,5 @@ MIT License
 ## 作者 - Author
 
 - (C)Tomoya Koyanagi <tomk79@gmail.com>
-- website: <http://www.pxt.jp/>
-- Twitter: @tomk79 <http://twitter.com/tomk79/>
+- website: <https://www.pxt.jp/>
+- Twitter: @tomk79 <https://twitter.com/tomk79/>

@@ -136,11 +136,11 @@ class mainTest extends PHPUnit_Framework_TestCase{
 
 		$this->assertEquals( 2, count($html->find('tr',16)->find('td')) );
 
-		$this->assertEquals( 'width:11.86440677966102%;', $html->find('colgroup',0)->find('col',0)->getAttribute('style') );
-		$this->assertEquals( 'width:37.28813559322034%;', $html->find('colgroup',0)->find('col',1)->getAttribute('style') );
-		$this->assertEquals( 'width:18.64406779661017%;', $html->find('colgroup',0)->find('col',2)->getAttribute('style') );
-		$this->assertEquals( 'width:18.64406779661017%;', $html->find('colgroup',0)->find('col',3)->getAttribute('style') );
-		$this->assertEquals( 'width:13.5593220338983%;', $html->find('colgroup',0)->find('col',4)->getAttribute('style') );
+		$this->assertRegExp( '/^width\:11\.864406779661(?:02)?\%\;$/', $html->find('colgroup',0)->find('col',0)->getAttribute('style') );
+		$this->assertRegExp( '/^width\:37\.28813559322(?:034)?\%\;$/', $html->find('colgroup',0)->find('col',1)->getAttribute('style') );
+		$this->assertRegExp( '/^width\:18\.64406779661(?:017)?\%\;$/', $html->find('colgroup',0)->find('col',2)->getAttribute('style') );
+		$this->assertRegExp( '/^width\:18\.64406779661(?:017)?\%\;$/', $html->find('colgroup',0)->find('col',3)->getAttribute('style') );
+		$this->assertRegExp( '/^width\:13\.559322033898(?:3)?\%\;$/', $html->find('colgroup',0)->find('col',4)->getAttribute('style') );
 
 	}//testMergedCells()
 

@@ -113,7 +113,7 @@ class render_html_by_excel{
 				if( $rowIdx <= $options['header_row'] || $colIdx <= $options['header_col'] ){
 					$cellTagName = 'th';
 				}
-				$cellValue = $cell->getFormattedValue();
+				$cellValue = @$cell->getFormattedValue();
 				switch( $options['cell_renderer'] ){
 					case 'text':
 						$cellValue = htmlspecialchars($cellValue);

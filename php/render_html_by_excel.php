@@ -30,7 +30,7 @@ class render_html_by_excel{
 	public function __construct( $fs, $filename ){
 		$this->fs = $fs;
 		$this->filename = $filename;
-		@$this->objPHPExcel = \PHPExcel_IOFactory::load( $this->filename );
+		@$this->objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load( $this->filename );
 	}
 
 	/**
@@ -54,10 +54,10 @@ class render_html_by_excel{
 					//    even if a cell value is not set.
 					// By default, only cells that have a value
 					//    set will be iterated.
-			} catch (\PHPExcel_Exception $e) {
+			} catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
 			}
 			foreach ($cellIterator as $colIdxName=>$cell) {
-				$colIdx = \PHPExcel_Cell::columnIndexFromString( $colIdxName );
+				$colIdx = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString( $colIdxName );
 				$col_widths[$colIdx] = intval( $objWorksheet->getColumnDimension($colIdxName)->getWidth() );
 			}
 			break;
@@ -79,10 +79,10 @@ class render_html_by_excel{
 					//    even if a cell value is not set.
 					// By default, only cells that have a value
 					//    set will be iterated.
-			} catch (\PHPExcel_Exception $e) {
+			} catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
 			}
 			foreach ($cellIterator as $colIdxName=>$cell) {
-				$colIdx = \PHPExcel_Cell::columnIndexFromString( $colIdxName );
+				$colIdx = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString( $colIdxName );
 				// var_dump($colIdx);
 				$rowspan = 1;
 				$colspan = 1;
@@ -92,14 +92,14 @@ class render_html_by_excel{
 				}
 				foreach($mergedCells as $mergedCell){//連結セルの検索
 					if( preg_match('/^'.preg_quote($colIdxName.$rowIdx).'\\:([a-zA-Z]+)([0-9]+)$/', $mergedCell, $matched) ){
-						$maxIdxC = \PHPExcel_Cell::columnIndexFromString( $matched[1] );
+						$maxIdxC = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString( $matched[1] );
 						// var_dump($colIdx);
 						// var_dump(\PHPExcel_Cell::stringFromColumnIndex($colIdx-1));
 						// var_dump($maxIdxC);
 						$maxIdxR = intval($matched[2]);
 						for( $idxC=$colIdx; $idxC<=$maxIdxC; $idxC++ ){
 							for( $idxR=$rowIdx; $idxR<=$maxIdxR; $idxR++ ){
-								$skipCell[\PHPExcel_Cell::stringFromColumnIndex($idxC-1).$idxR] = \PHPExcel_Cell::stringFromColumnIndex($idxC-1).$idxR;
+								$skipCell[\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($idxC-1).$idxR] = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($idxC-1).$idxR;
 							}
 						}
 						$colspan = $maxIdxC-$colIdx+1;

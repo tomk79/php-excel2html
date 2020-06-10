@@ -75,11 +75,9 @@ class main{
 		$this->options = $options;
 
 		if( $this->ext == 'csv' ){
-			require_once( __DIR__.'/render_html_by_csv.php' );
 			$renderer = new render_html_by_csv( $this->fs, $this->filename );
 			$rtn = $renderer->render($options);
 		}else{
-			require_once( __DIR__.'/render_html_by_excel.php' );
 			$renderer = new render_html_by_excel( $this->fs, $this->filename );
 			$rtn = $renderer->render($options);
 		}

@@ -24,6 +24,7 @@ before_install:
 
 before_script:
   - composer install
+  - composer check-platform-reqs --no-dev
 
 script:
   - ./vendor/phpunit/phpunit/phpunit

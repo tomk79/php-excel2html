@@ -46,6 +46,7 @@ install:
   - echo extension=php_xsl.dll >> php.ini
   - echo extension=php_intl.dll >> php.ini
   - echo extension=php_pdo_sqlite.dll >> php.ini
+  - echo extension=php_fileinfo.dll >> php.ini
   - echo output_buffering = Off >> php.ini
   - echo default_charset = UTF-8 >> php.ini
   - echo mbstring.language = Japanese >> php.ini

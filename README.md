@@ -1,10 +1,10 @@
 # tomk79/php-excel2html
 
 
-Convert Excel(\*.xlsx) to HTML Table. (with [PHPExcel](https://github.com/PHPOffice/PHPExcel)).
+Convert Excel(\*.xlsx) to HTML Table. (with [PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)).
 
 Excel 形式のファイルを、HTMLの tableタグに変換します。
-([PHPExcel](https://github.com/PHPOffice/PHPExcel) を利用しています)
+([PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)) を利用しています)
 
 <table>
   <thead>
@@ -90,6 +90,14 @@ print $src;
 </dl>
 
 
+## 更新履歴 - Change log
+
+### tomk79/php-excel2html v0.1.0 (リリース日未定)
+
+- Excelファイルの解析ライブラリを PHPExcel から PhpSpreadsheet へ移行した。
+- PhpSpreadsheet に合わせて、システム要件を更新。 PHP 7.1.x 以下が対象外となり、いくつかのPHP拡張が要件に追加された。
+
+
 ## ライセンス - License
 
 MIT License
@@ -98,5 +106,5 @@ MIT License
 ## 作者 - Author
 
 - (C)Tomoya Koyanagi <tomk79@gmail.com>
-- website: <http://www.pxt.jp/>
-- Twitter: @tomk79 <http://twitter.com/tomk79/>
+- website: <https://www.pxt.jp/>
+- Twitter: @tomk79 <https://twitter.com/tomk79/>

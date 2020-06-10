@@ -30,7 +30,7 @@ class render_html_by_excel{
 	public function __construct( $fs, $filename ){
 		$this->fs = $fs;
 		$this->filename = $filename;
-		@$this->objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load( $this->filename );
+		$this->objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load( $this->filename );
 	}
 
 	/**
@@ -87,7 +87,7 @@ class render_html_by_excel{
 				$rowspan = 1;
 				$colspan = 1;
 
-				if( @$skipCell[$colIdxName.$rowIdx] ){
+				if( array_key_exists($colIdxName.$rowIdx, $skipCell) && $skipCell[$colIdxName.$rowIdx] ){
 					continue;
 				}
 				foreach($mergedCells as $mergedCell){//連結セルの検索
@@ -179,7 +179,7 @@ class render_html_by_excel{
 		}
 		// var_dump($skipCell);
 
-		if( !@$options['strip_table_tag'] ){
+		if( !array_key_exists('strip_table_tag', $options) || !$options['strip_table_tag'] ){
 			print '<table>'.PHP_EOL;
 		}
 		if( $options['render_cell_width'] ){
@@ -198,7 +198,7 @@ class render_html_by_excel{
 		print $tbody;
 		print '</tbody>'.PHP_EOL;
 
-		if( !@$options['strip_table_tag'] ){
+		if( !array_key_exists('strip_table_tag', $options) || !$options['strip_table_tag'] ){
 			print '</table>'.PHP_EOL;
 		}
 		$rtn = ob_get_clean();

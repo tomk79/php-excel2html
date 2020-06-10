@@ -84,7 +84,7 @@ class render_html_by_csv{
 
 
 		ob_start();
-		if( !@$options['strip_table_tag'] ){
+		if( !array_key_exists('strip_table_tag', $options) || !$options['strip_table_tag'] ){
 			print '<table>'.PHP_EOL;
 		}
 		if( strlen($html_colgroup) ){
@@ -101,7 +101,7 @@ class render_html_by_csv{
 		print $tbody;
 		print '</tbody>'.PHP_EOL;
 
-		if( !@$options['strip_table_tag'] ){
+		if( !array_key_exists('strip_table_tag', $options) || !$options['strip_table_tag'] ){
 			print '</table>'.PHP_EOL;
 		}
 		$rtn = ob_get_clean();

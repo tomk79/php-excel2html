@@ -92,10 +92,14 @@ print $src;
 
 ## 更新履歴 - Change log
 
-### tomk79/php-excel2html v0.1.0 (リリース日未定)
+### tomk79/php-excel2html v0.1.0 (2020年6月11日)
 
 - Excelファイルの解析ライブラリを PHPExcel から PhpSpreadsheet へ移行した。
 - PhpSpreadsheet に合わせて、システム要件を更新。 PHP 7.1.x 以下が対象外となり、いくつかのPHP拡張が要件に追加された。
+
+### tomk79/php-excel2html v0.0.8 (2020年6月11日)
+
+- PHPExcelの特定の処理で異常終了する場合がある問題を修正。
 
 ### tomk79/php-excel2html v0.0.7 (2016年10月18日)
 

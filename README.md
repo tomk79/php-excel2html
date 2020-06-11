@@ -92,6 +92,10 @@ print $src;
 
 ## 更新履歴 - Change log
 
+### tomk79/php-excel2html v0.0.8 (2020年6月11日)
+
+- PHPExcelの特定の処理で異常終了する場合がある問題を修正。
+
 ### tomk79/php-excel2html v0.0.7 (2016年10月18日)
 
 - PHPExcelの特定の処理で異常終了する場合がある問題を修正。

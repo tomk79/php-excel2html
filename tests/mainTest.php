@@ -124,6 +124,12 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		// var_dump($src);
 
 		$html = str_get_html( $src, true, true, DEFAULT_TARGET_CHARSET, false, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT );
+
+		$this->assertEquals( 'A1', $html->find('tr',0)->find('td',0)->innertext );
+		$this->assertEquals( 4, count($html->find('tr',0)->find('td')) );
+
+		$this->assertEquals( 5, count($html->find('tr',1)->find('td')) );
+
 		$this->assertEquals( 'B4', $html->find('tr',3)->find('td',1)->innertext );
 		$this->assertEquals( '10', $html->find('tr',3)->find('td',1)->getAttribute('rowspan') );
 		$this->assertEquals( '3', $html->find('tr',3)->find('td',1)->getAttribute('colspan') );

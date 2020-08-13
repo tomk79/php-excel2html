@@ -92,6 +92,10 @@ print $src;
 
 ## 更新履歴 - Change log
 
+### tomk79/php-excel2html v0.1.1 (リリース日未定)
+
+- セル結合している場合に、HTMLテーブルが崩れる不具合を修正。
+
 ### tomk79/php-excel2html v0.1.0 (2020年6月11日)
 
 - Excelファイルの解析ライブラリを PHPExcel から PhpSpreadsheet へ移行した。

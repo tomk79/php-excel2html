@@ -99,7 +99,8 @@ class render_html_by_excel{
 						$maxIdxR = intval($matched[2]);
 						for( $idxC=$colIdx; $idxC<=$maxIdxC; $idxC++ ){
 							for( $idxR=$rowIdx; $idxR<=$maxIdxR; $idxR++ ){
-								$skipCell[\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($idxC-1).$idxR] = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($idxC-1).$idxR;
+								$tmpColumnIdxName = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($idxC);
+								$skipCell[$tmpColumnIdxName.$idxR] = $tmpColumnIdxName.$idxR;
 							}
 						}
 						$colspan = $maxIdxC-$colIdx+1;

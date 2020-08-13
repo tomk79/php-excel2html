@@ -164,9 +164,16 @@ class render_html_by_excel{
 					array_push( $styles, 'border-left: '.$this->get_borderstyle_by_border($cellStyle->getBorders()->getLeft()).';' );
 				}
 
+				// Hyperlink
+				$hyperlink = $cell->getHyperlink()->getUrl();
+
 
 				$tmpRow .= '<'.$cellTagName.($rowspan>1?' rowspan="'.$rowspan.'"':'').($colspan>1?' colspan="'.$colspan.'"':'').''.(count($styles)?' style="'.htmlspecialchars(implode(' ',$styles)).'"':'').'>';
-				$tmpRow .= $cellValue;
+				if( strlen($hyperlink) ){
+					$tmpRow .= '<a href="'.htmlspecialchars($hyperlink).'" target="_blank">'.$cellValue.'</a>';
+				}else{
+					$tmpRow .= $cellValue;
+				}
 				// $tmpRow .= $cellStyle->getFill()->getFillType();
 				$tmpRow .= '</'.$cellTagName.'>'.PHP_EOL;
 			}

@@ -35,6 +35,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( 18, count($html->find('tr')) );
 		$this->assertEquals( 5, count($html->find('tr',0)->find('td')) );
 		$this->assertEquals( 'E18', $html->find('tr',17)->childNodes(4)->innertext );
+		$this->assertEquals( '<a href="https://pickles2.pxt.jp/" target="_blank">D18</a>', $html->find('tr',17)->childNodes(3)->innertext );
 		$this->assertNull( $html->find('tr',18) );
 		$this->assertNull( $html->find('tr',17)->childNodes(5) );
 

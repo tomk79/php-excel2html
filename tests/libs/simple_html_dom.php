@@ -62,7 +62,8 @@ if(!defined('HDOM_INFO_ENDSPACE'))    { define('HDOM_INFO_ENDSPACE',7); }
 if(!defined('DEFAULT_TARGET_CHARSET')){ define('DEFAULT_TARGET_CHARSET', 'UTF-8'); }
 if(!defined('DEFAULT_BR_TEXT'))       { define('DEFAULT_BR_TEXT', "\r\n"); }
 if(!defined('DEFAULT_SPAN_TEXT'))     { define('DEFAULT_SPAN_TEXT', " "); }
-if(!defined('MAX_FILE_SIZE'))         { define('MAX_FILE_SIZE', 600000); }
+// if(!defined('MAX_FILE_SIZE'))         { define('MAX_FILE_SIZE', 600*1000*1000); }
+
 // helper functions
 // -----------------------------------------------------------------------------
 // get html dom from file
@@ -75,7 +76,7 @@ function file_get_html($url, $use_include_path = false, $context=null, $offset =
     $contents = file_get_contents($url, $use_include_path, $context, $offset);
     // Paperg - use our own mechanism for getting the contents as we want to control the timeout.
     //$contents = retrieve_url_contents($url);
-    if (empty($contents) || strlen($contents) > MAX_FILE_SIZE)
+    if (empty($contents) || strlen($contents) > 600*1000*1000)
     {
         return false;
     }
@@ -88,7 +89,7 @@ function file_get_html($url, $use_include_path = false, $context=null, $offset =
 function str_get_html($str, $lowercase=true, $forceTagsClosed=true, $target_charset = DEFAULT_TARGET_CHARSET, $stripRN=true, $defaultBRText=DEFAULT_BR_TEXT, $defaultSpanText=DEFAULT_SPAN_TEXT)
 {
     $dom = new simple_html_dom(null, $lowercase, $forceTagsClosed, $target_charset, $stripRN, $defaultBRText, $defaultSpanText);
-    if (empty($str) || strlen($str) > MAX_FILE_SIZE)
+    if (empty($str) || strlen($str) > 600*1000*1000)
     {
         $dom->clear();
         return false;

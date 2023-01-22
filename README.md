@@ -92,6 +92,10 @@ print $src;
 
 ## 更新履歴 - Change log
 
+### tomk79/php-excel2html v0.1.2 (リリース日未定)
+
+- 内部コードの細かい修正。
+
 ### tomk79/php-excel2html v0.1.1 (2020年10月17日)
 
 - セル結合している場合に、HTMLテーブルが崩れる不具合を修正。

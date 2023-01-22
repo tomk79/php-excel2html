@@ -92,7 +92,7 @@ class main{
 	private function optimize_options( $options ){
 		$rtn = array();
 
-		$rtn['renderer'] = @$options['renderer'].'';
+		$rtn['renderer'] = $options['renderer'] ?? '';
 		if(!strlen($rtn['renderer'])){
 			$rtn['renderer'] = 'strict';
 		}
@@ -100,12 +100,12 @@ class main{
 			// CSVが対象の場合、強制的に 単純化 する。
 			$rtn['renderer'] = 'simplify';
 		}
-		$rtn['cell_renderer'] = @$options['cell_renderer'];
-		if(!strlen($rtn['cell_renderer'])){
+		$rtn['cell_renderer'] = $options['cell_renderer'] ?? null;
+		if(!strlen($rtn['cell_renderer'] ?? '')){
 			$rtn['cell_renderer'] = 'text';
 		}
-		$rtn['header_row'] = @intval($options['header_row']);
-		$rtn['header_col'] = @intval($options['header_col']);
+		$rtn['header_row'] = intval($options['header_row'] ?? null);
+		$rtn['header_col'] = intval($options['header_col'] ?? null);
 		$rtn['strip_table_tag'] = @(bool) $options['strip_table_tag'];
 
 		// レンダーオプションの初期値を設定
@@ -128,25 +128,25 @@ class main{
 		}
 
 		if( !is_null( @$options['render_cell_width'] ) ){
-			$rtn['render_cell_width'] = @(bool) $options['render_cell_width'];
+			$rtn['render_cell_width'] = (bool) $options['render_cell_width'];
 		}
 		if( !is_null( @$options['render_cell_height'] ) ){
-			$rtn['render_cell_height'] = @(bool) $options['render_cell_height'];
+			$rtn['render_cell_height'] = (bool) $options['render_cell_height'];
 		}
 		if( !is_null( @$options['render_cell_background'] ) ){
-			$rtn['render_cell_background'] = @(bool) $options['render_cell_background'];
+			$rtn['render_cell_background'] = (bool) $options['render_cell_background'];
 		}
 		if( !is_null( @$options['render_cell_font'] ) ){
-			$rtn['render_cell_font'] = @(bool) $options['render_cell_font'];
+			$rtn['render_cell_font'] = (bool) $options['render_cell_font'];
 		}
 		if( !is_null( @$options['render_cell_borders'] ) ){
-			$rtn['render_cell_borders'] = @(bool) $options['render_cell_borders'];
+			$rtn['render_cell_borders'] = (bool) $options['render_cell_borders'];
 		}
 		if( !is_null( @$options['render_cell_align'] ) ){
-			$rtn['render_cell_align'] = @(bool) $options['render_cell_align'];
+			$rtn['render_cell_align'] = (bool) $options['render_cell_align'];
 		}
 		if( !is_null( @$options['render_cell_vertical_align'] ) ){
-			$rtn['render_cell_vertical_align'] = @(bool) $options['render_cell_vertical_align'];
+			$rtn['render_cell_vertical_align'] = (bool) $options['render_cell_vertical_align'];
 		}
 
 		return $rtn;

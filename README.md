@@ -92,7 +92,7 @@ print $src;
 
 ## 更新履歴 - Change log
 
-### tomk79/php-excel2html v0.1.2 (リリース日未定)
+### tomk79/php-excel2html v0.1.2 (2023年2月5日)
 
 - 内部コードの細かい修正。
 

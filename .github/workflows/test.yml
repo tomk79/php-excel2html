@@ -1,0 +1,45 @@
+# ----------------------------------------------------------------------------
+# PHPUnit を、対応している PHP と PhpSpreadsheet の組み合わせで実行する
+# ----------------------------------------------------------------------------
+name: test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { php: "7.4", spreadsheet: "^1.13" }
+          - { php: "8.4", spreadsheet: "^1.13" }
+          - { php: "8.4", spreadsheet: "^2.0" }
+          - { php: "8.4", spreadsheet: "^3.0" }
+          - { php: "8.4", spreadsheet: "^5.0" }
+          - { php: "8.5", spreadsheet: "^5.0" }
+    name: PHP ${{ matrix.php }} / PhpSpreadsheet ${{ matrix.spreadsheet }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: gd, zip, mbstring, xml, xmlreader, xmlwriter, simplexml, iconv, zlib, fileinfo
+          coverage: none
+
+      - name: Install dependencies
+        env:
+          SPREADSHEET_VERSION: ${{ matrix.spreadsheet }}
+        run: |
+          composer require --no-update "phpoffice/phpspreadsheet:${SPREADSHEET_VERSION}"
+          composer update --no-interaction --prefer-dist --no-progress
+          composer show phpoffice/phpspreadsheet | grep -E '^versions'
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit

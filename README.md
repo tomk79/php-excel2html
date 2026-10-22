@@ -94,7 +94,7 @@ print $src;
 
 ### tomk79/php-excel2html v0.1.3 (リリース日未定)
 
-- PhpSpreadsheet 2.x 〜 5.x に対応した。これにより、 PHP 8.5 で利用できるようになった。
+- PhpSpreadsheet 2.x, 3.x, 5.x に対応した。これにより、 PHP 8.5 で利用できるようになった。 (4.x は、すべての版にセキュリティ勧告が出ているため対象外)
 - tomk79/filesystem v1.4.0 以降で、 Shift_JIS などの CSV が文字化けする不具合を修正した。
 - テストを現在の PHPUnit で実行できるようにした。
 

@@ -1,0 +1,7 @@
+# GitHub Actions のバージョン (コミットの SHA で固定している) を、毎週更新する
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

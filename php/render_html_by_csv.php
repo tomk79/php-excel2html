@@ -32,7 +32,11 @@ class render_html_by_csv{
 	 * CSVファイルからHTMLを描画する
 	 */
 	public function render( $options ){
-		$csv = $this->fs->read_csv($this->filename);
+		// NOTE: Excel で保存した CSV は Shift_JIS のことが多いため、文字コードを自動判定する。
+		// tomk79/filesystem v1.4.0 以降、 read_csv() の既定値は UTF-8 固定になったので、明示的に指定する。
+		$csv = $this->fs->read_csv($this->filename, array(
+			'charset' => 'UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP',
+		));
 		// var_dump($csv);
 
 		$thead = '';

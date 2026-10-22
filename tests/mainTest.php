@@ -3,7 +3,7 @@
  * test for tomk79\php-excel2html
  */
 
-class mainTest extends PHPUnit_Framework_TestCase{
+class mainTest extends \PHPUnit\Framework\TestCase{
 
 	/**
 	 * ファイルシステムユーティリティ
@@ -13,7 +13,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	/**
 	 * setup
 	 */
-	public function setup(){
+	protected function setUp(): void{
 		require_once(__DIR__.'/libs/simple_html_dom.php');
 		$this->fs = new \tomk79\filesystem();
 		mb_internal_encoding('utf-8');
@@ -143,11 +143,11 @@ class mainTest extends PHPUnit_Framework_TestCase{
 
 		$this->assertEquals( 2, count($html->find('tr',16)->find('td')) );
 
-		$this->assertRegExp( '/^width\:11\.864406779661(?:02)?\%\;$/', $html->find('colgroup',0)->find('col',0)->getAttribute('style') );
-		$this->assertRegExp( '/^width\:37\.28813559322(?:034)?\%\;$/', $html->find('colgroup',0)->find('col',1)->getAttribute('style') );
-		$this->assertRegExp( '/^width\:18\.64406779661(?:017)?\%\;$/', $html->find('colgroup',0)->find('col',2)->getAttribute('style') );
-		$this->assertRegExp( '/^width\:18\.64406779661(?:017)?\%\;$/', $html->find('colgroup',0)->find('col',3)->getAttribute('style') );
-		$this->assertRegExp( '/^width\:13\.559322033898(?:3)?\%\;$/', $html->find('colgroup',0)->find('col',4)->getAttribute('style') );
+		$this->assertMatchesRegularExpression( '/^width\:11\.864406779661(?:02)?\%\;$/', $html->find('colgroup',0)->find('col',0)->getAttribute('style') );
+		$this->assertMatchesRegularExpression( '/^width\:37\.28813559322(?:034)?\%\;$/', $html->find('colgroup',0)->find('col',1)->getAttribute('style') );
+		$this->assertMatchesRegularExpression( '/^width\:18\.64406779661(?:017)?\%\;$/', $html->find('colgroup',0)->find('col',2)->getAttribute('style') );
+		$this->assertMatchesRegularExpression( '/^width\:18\.64406779661(?:017)?\%\;$/', $html->find('colgroup',0)->find('col',3)->getAttribute('style') );
+		$this->assertMatchesRegularExpression( '/^width\:13\.559322033898(?:3)?\%\;$/', $html->find('colgroup',0)->find('col',4)->getAttribute('style') );
 
 	}//testMergedCells()
 

@@ -23,7 +23,7 @@
         "phpoffice/phpspreadsheet": "^1.13"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8.0"
+        "phpunit/phpunit": "^9.6 || ^10.5 || ^11.5 || ^12.0"
     },
     "autoload": {
         "files": [

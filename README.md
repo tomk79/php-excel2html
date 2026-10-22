@@ -92,6 +92,11 @@ print $src;
 
 ## 更新履歴 - Change log
 
+### tomk79/php-excel2html v0.1.3 (リリース日未定)
+
+- PhpSpreadsheet 2.x 〜 5.x に対応した。これにより、 PHP 8.5 で利用できるようになった。
+- テストを現在の PHPUnit で実行できるようにした。
+
 ### tomk79/php-excel2html v0.1.2 (2023年2月5日)
 
 - 内部コードの細かい修正。
